@@ -36,7 +36,7 @@ modules.builtin
 *.porig
 *.orig
 rtk_hciattach
-
+*.kdev4
 #
 # Top-level generic files
 #

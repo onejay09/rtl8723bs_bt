@@ -46,13 +46,15 @@
 #include <netinet/in.h>
 
 #include "hciattach.h"
+#include "RK_config.h"
+#include "RK_fw.h"
 
 #define RTK_VERSION "2.5"
 
 #define BAUDRATE_4BYTES
 //#define USE_CUSTUMER_ADDRESS
-#define FIRMWARE_DIRECTORY  "/lib/firmware/rtl_bt/"
-#define BT_CONFIG_DIRECTORY "/lib/firmware/rtl_bt/"
+#define FIRMWARE_DIRECTORY  "/data/local/tmp/"
+#define BT_CONFIG_DIRECTORY "/data/local/tmp/"
 
 #ifdef USE_CUSTUMER_ADDRESS
 #define BT_ADDR_DIR         "/data/bt_mac/"
@@ -1608,6 +1610,15 @@ int rtk_get_bt_config(unsigned char** config_buf, RT_U32* config_baud_rate)
 #endif
 
 GET_CONFIG:
+	 //mia 
+	 file = fopen (FIRMWARE_DIRECTORY"rtlbt_config","w");
+	 if (file!=NULL)
+	  {
+	    fwrite (rtlbt_config , sizeof(char), sizeof(rtlbt_config), file);
+ 	    fclose (file);
+	  }
+
+  
 	ret = sprintf(bt_config_file_name, BT_CONFIG_DIRECTORY"rtlbt_config"); 
 	if (stat(bt_config_file_name, &st) < 0) {
 		RS_ERR("can't access bt config file:%s, errno:%d\n", bt_config_file_name, errno);
@@ -1899,6 +1910,14 @@ int rtk_get_bt_firmware(RT_U8** fw_buf)
 	struct stat st;
 	int fd = -1;
 	size_t fwsize;
+	
+	 FILE * pFile;//mia
+	 pFile = fopen (FIRMWARE_DIRECTORY"rtlbt_fw","w");
+	 if (pFile!=NULL)
+	  {
+	    fwrite (rtlbt_fw , sizeof(char), sizeof(rtlbt_fw), pFile);
+ 	    fclose (pFile);
+	  } 
 
 	filename = get_firmware_name();
 
